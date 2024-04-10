@@ -13,6 +13,7 @@ import (
 	iofs "io/fs"
 	"os"
 	"path"
+	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
@@ -2122,6 +2123,16 @@ func (o *Object) Update(ctx context.Context, in io.Reader, src fs.ObjectInfo, op
 		o.fs.putSftpConnection(&c, err)
 		return fmt.Errorf("Update Create failed: %w", err)
 	}
+	srcPath := filepath.Join(src.Fs().Root(), src.String())
+	if strings.HasSuffix(srcPath, ".partial") {
+		sps := strings.Split(srcPath, ".")
+		srcPath = strings.Join(sps[:len(sps)-2], ".")
+	}
+	srcStat, err := os.Stat(srcPath)
+	if err == nil && srcStat != nil && !srcStat.IsDir() {
+		file.Chmod(srcStat.Mode())
+	}
+
 	// remove the file if upload failed
 	remove := func() {
 		c, removeErr := o.fs.getSftpConnection(ctx)
