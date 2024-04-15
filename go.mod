@@ -1,4 +1,4 @@
-module github.com/hffariel/rclone
+module github.com/rclone/rclone
 
 go 1.20
 
@@ -201,5 +201,3 @@ require (
 	golang.org/x/mobile v0.0.0-20240112133503-c713f31d574b
 	golang.org/x/term v0.16.0
 )
-
-replace github.com/rclone/rclone => github.com/hffariel/rclone v1.166.0
