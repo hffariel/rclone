@@ -1,4 +1,4 @@
-module github.com/rclone/rclone
+module github.com/hffariel/rclone
 
 go 1.20
 
@@ -53,6 +53,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/prometheus/client_golang v1.18.0
 	github.com/putdotio/go-putio/putio v0.0.0-20200123120452-16d982cac2b8
+	github.com/rclone/rclone v0.0.0-00010101000000-000000000000
 	github.com/rfjakob/eme v1.1.2
 	github.com/rivo/uniseg v0.4.4
 	github.com/rogpeppe/go-internal v1.11.0
@@ -200,3 +201,5 @@ require (
 	golang.org/x/mobile v0.0.0-20240112133503-c713f31d574b
 	golang.org/x/term v0.16.0
 )
+
+replace github.com/rclone/rclone => github.com/hffariel/rclone v1.166.0
