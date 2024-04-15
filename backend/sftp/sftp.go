@@ -796,9 +796,19 @@ func (f *Fs) drainPool(ctx context.Context) (err error) {
 	return err
 }
 
+func NewFs(ctx context.Context, name, root string, m configmap.Mapper) (fs.Fs, error) {
+	// Parse config into Options struct
+	opt := new(Options)
+	err := configstruct.Set(m, opt)
+	if err != nil {
+		return nil, err
+	}
+	return NewFsWithOption(ctx, name, root, m, opt)
+}
+
 // NewFs creates a new Fs object from the name and root. It connects to
 // the host specified in the config file.
-func NewFs(ctx context.Context, name, root string, m configmap.Mapper) (fs.Fs, error) {
+func NewFsWithOption(ctx context.Context, name, root string, m configmap.Mapper, optIn *Options) (fs.Fs, error) {
 	// This will hold the Fs object.  We need to create it here
 	// so we can refer to it in the SSH callback, but it's populated
 	// in NewFsWithConnection
@@ -806,7 +816,7 @@ func NewFs(ctx context.Context, name, root string, m configmap.Mapper) (fs.Fs, e
 		ci: fs.GetConfig(ctx),
 	}
 	// Parse config into Options struct
-	opt := new(Options)
+	opt := optIn
 	err := configstruct.Set(m, opt)
 	if err != nil {
 		return nil, err
