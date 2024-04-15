@@ -284,10 +284,20 @@ var (
 	errLinksNeedsSuffix  = errors.New("need \"" + linkSuffix + "\" suffix to refer to symlink when using -l/--links")
 )
 
-// NewFs constructs an Fs from the path
 func NewFs(ctx context.Context, name, root string, m configmap.Mapper) (fs.Fs, error) {
 	// Parse config into Options struct
 	opt := new(Options)
+	err := configstruct.Set(m, opt)
+	if err != nil {
+		return nil, err
+	}
+	return NewFsWithOption(ctx, name, root, m, opt)
+}
+
+// NewFsWithOption constructs an Fs from the path
+func NewFsWithOption(ctx context.Context, name, root string, m configmap.Mapper, optIn *Options) (fs.Fs, error) {
+	// Parse config into Options struct
+	opt := optIn
 	err := configstruct.Set(m, opt)
 	if err != nil {
 		return nil, err
